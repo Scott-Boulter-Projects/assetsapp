@@ -20,7 +20,7 @@
 <!-- Lines 27 to 52 utilise the Jinja2 templating engine to check if the user is logged in, and if they are they will see navigation links to the Assets, Customers, Manufacturers and Logout pages. But if they aren't, they will only see links to Register and Login -->
 
 <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <a class="navbar-brand" href="{{ url_for('main.index') }}">
             <img src="{{ url_for('static', filename='nofusslogo_sml.png') }}" alt="Logo" height="50">
         </a>
