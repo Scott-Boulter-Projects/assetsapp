@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-<!-- Lines 5 to 40 generate a form for the user to login with using their username and password, which will only succeed as long as the validation checks in routes.py are passed upon submisson. If the user enters an incorrect username or password, a flashed message generated in the login route in routes.py will be displayed at the top of the page informing the user that they have entered incorrect details. If successful, the user will be redirected to the homepage (index.html) and informed that their login was successful -->
+<!-- Lines 5 to 42 generate a form for the user to login with using their username and password, which will only succeed as long as the validation checks in routes.py are passed upon submisson. If the user enters an incorrect username or password, a flashed message generated in the login route in routes.py will be displayed at the top of the page informing the user that they have entered incorrect details. If successful, the user will be redirected to the homepage (index.html) and informed that their login was successful -->
 
 {% block content %}
 <div class="row">
@@ -27,10 +27,12 @@
                 {{ form.username.label }}
                 {{ form.username(class="form-control") }}
             </div>
+            <br>
             <div class="form-group">
                 {{ form.password.label }}
                 {{ form.password(class="form-control") }}
             </div>
+            <br>
             <div class="form-group">
                 {{ form.submit(class="btn btn-primary") }}
             </div>
