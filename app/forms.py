@@ -22,15 +22,21 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-# Lines 28 to 41 utilise the Flask WTForms library to define the class for the asset creation form that appears on assets.html. The category choices are based on the ones defined in the list below, the comments field is a free text field that may or may not require data, whilst the customer and manufacturer fields pull data from the database by finding the ID of the corresponding customer/manufacturer
+# Lines 28 to 47 utilise the Flask WTForms library to define the class for the asset creation form that appears on assets.html. The category choices are based on the ones defined in the list below, the comments field is a free text field that may or may not require data, whilst the customer and manufacturer fields pull data from the database by finding the ID of the corresponding customer/manufacturer
 
 
 class AssetForm(FlaskForm):
     category_choices = [
         ('Laptop'),
-        ('Mobile'),
+        ('Desktop'),
         ('Keyboard'),
-        ('Mouse')
+        ('Mouse'),
+        ('Monitor'),
+        ('Headset'),
+        ('Printer'),
+        ('Mobile'),
+        ('Tablet'),
+        ('Server')
     ]
 
     category = SelectField(
@@ -40,14 +46,14 @@ class AssetForm(FlaskForm):
     manufacturer = SelectField('Manufacturer', coerce=int)
     submit = SubmitField('Create Asset')
 
-# Lines 46 to 48 utilise the Flask WTForms library to define the class for the customer creation form that appears on customers.html. The name field is validated to ensure that data is present before it can be submitted
+# Lines 52 to 54 utilise the Flask WTForms library to define the class for the customer creation form that appears on customers.html. The name field is validated to ensure that data is present before it can be submitted
 
 
 class CustomerForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     submit = SubmitField('Add Customer')
 
-# Lines 53 to 55 utilise the Flask WTForms library to define the class for the manufacturer creation form that appears on manufacturers.html. The name field is validated to ensure that data is present before it can be submitted
+# Lines 59 to 61 utilise the Flask WTForms library to define the class for the manufacturer creation form that appears on manufacturers.html. The name field is validated to ensure that data is present before it can be submitted
 
 
 class ManufacturerForm(FlaskForm):
