@@ -12,7 +12,7 @@
     </div>
     {% endfor %}
 
-    <!-- Lines 17 to 30 generate a form for the user to edit the data and dropdown selections for an existing customer in the database, and any changes are then pushed to that record in the database if the validation checks pass upon submission -->
+    <!-- Lines 17 to 31 generate a form for the user to edit the data and dropdown selections for an existing customer in the database, and any changes are then pushed to that record in the database if the validation checks pass upon submission -->
 
     <form method="POST">
         {{ customer_form.hidden_tag() }}
@@ -20,6 +20,7 @@
             {{ customer_form.name.label(class="form-label") }}
             {{ customer_form.name(class="form-control") }}
         </div>
+        <br>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">
                 Update Customer
