@@ -3,11 +3,12 @@ from app import create_app
 from wtforms import SubmitField, SelectField, TextAreaField
 from app.forms import RegistrationForm, LoginForm, AssetForm, CustomerForm, ManufacturerForm
 
+# The following code disables CSRF protection to enable the Pytest unit tests that follow to run, which check the validation (or expected data) for each of the forms in the application (the registration form, login form, asset form, customer form, and manufacturer form)
+
 
 @pytest.fixture(scope="module")
 def app():
     app = create_app()
-    app.config['TESTING'] = True
     app.config['WTF_CSRF_ENABLED'] = False
     return app
 

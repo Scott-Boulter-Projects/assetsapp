@@ -15,7 +15,7 @@ def index():
     return render_template('index.html')
 
 
-# Lines 21 to 40 ensure that when the register.html page is accessed, the registration form is retrieved. When the user submits the form, validation takes place to query the User class and check the database to make sure a user cannot register with a username that has already been used, and if that username does already exist then a warning message will display to ask the user to choose a different one. Following this, the password chosen is hashed using the Werkzeug library's scrypt method to encrypt the password within the database so that is not stored in plain text. Then, the user is automatically set as a regular user so that they can perform CRU operations (but not CRUD operations, which are reserved for admin users). The new user's data is committed to the database, and the user is redirected to the login page where a flash message informs them that registration was successful
+# Lines 21 to 44 ensure that when the register.html page is accessed, the registration form is retrieved. When the user submits the form, validation takes place to query the User class and check the database to make sure a user cannot register with a username that has already been used, and if that username does already exist then a warning message will display to ask the user to choose a different one. It will also check to make sure that the user doesn't use the same information in the username and password fields, if they do then a warning message will display saying that the data in these fields must be different. Another check follows to ensure that the data entered into the password and confirm password fields is the same, if it doesn't then the user will be informed that the information must match. Following this, the password chosen is hashed using the Werkzeug library's scrypt method to encrypt the password within the database so that it is not stored in plain text. Then, the user is automatically set as a regular user so that they can perform CRU (Create, Read, Update) operations, but not CRUD (Create, Read, Update, Delete) operations, which are reserved for admin users. The new user's data is committed to the database, and they are redirected to the login page where a flash message informs them that registration was successful
 
 
 @main.route('/register', methods=['GET', 'POST'])
@@ -27,6 +27,10 @@ def register():
         if existing_user:
             flash(
                 'Username is already taken. Please choose a different username.', 'danger')
+        elif form.username.data == form.password.data:
+            flash('Username and password must be different.', 'danger')
+        elif form.password.data != form.confirm_password.data:
+            flash('Password and confirm password must match.', 'danger')
         else:
             hashed_password = generate_password_hash(
                 form.password.data, method='scrypt')
@@ -40,7 +44,7 @@ def register():
     return render_template('register.html', form=form)
 
 
-# Lines 46 to 58 ensure that when the register.html page is accessed, the login form is retrieved. When the user attempts to login with their details, validation takes place to check that the username and hashed password match an entry in the user table within the database. If an incorrect username or password is entered amd submitted, they will be unable to login and will see a flash message informing them that their details are incorrect. If the username and password are correct and a match, the user is redirected to the homepage and informed of their successful login
+# Lines 50 to 62 ensure that when the register.html page is accessed, the login form is retrieved. When the user attempts to login with their details, validation takes place to check that the username and hashed password match an entry in the user table within the database. If an incorrect username or password is entered amd submitted, they will be unable to login and will see a flash message informing them that their details are incorrect. If the username and password are correct and a match, the user is redirected to the homepage and informed of their successful login
 
 
 @main.route('/login', methods=['GET', 'POST'])
@@ -58,7 +62,7 @@ def login():
     return render_template('login.html', form=form)
 
 
-# Lines 64 to 71 ensure that the user is redirected to logout.html when they click on the logout button, upon which they will encounter a dialog box asking if they want to confirm or cancel the logout action. If they confirm the action, the user will be logged out of the application and redirected to the homepage, upon which they will see a flashed message informing them of their successful logout
+# Lines 68 to 75 ensure that the user is redirected to logout.html when they click on the logout button, upon which they will encounter a dialog box asking if they want to confirm or cancel the logout action. If they confirm the action, the user will be logged out of the application and redirected to the homepage, upon which they will see a flashed message informing them of their successful logout
 
 
 @main.route('/logout', methods=['GET', 'POST'])
@@ -71,7 +75,7 @@ def logout():
     return render_template('logout.html')
 
 
-# Lines 77 to 95 ensure that when the assets.html page is accessed, the assets form is retrieved. Validation takes place on submission to check that the data in each field matches the database model, and if it does, the new record is committed to the database and a flashed message appears to inform the user of the successful submission
+# Lines 81 to 99 ensure that when the assets.html page is accessed, the assets form is retrieved. Validation takes place on submission to check that the data in each field matches the database model, and if it does, the new record is committed to the database and a flashed message appears to inform the user of the successful submission
 
 
 @main.route('/assets', methods=['GET', 'POST'])
@@ -95,7 +99,7 @@ def assets():
     return render_template('assets.html', form=form, assets=assets)
 
 
-# The asset edit route (lines 101 to 128) directs the user to the edit_asset.html page and prepopulates the fields with the data that forms the selected record retrieved from the database. Validation again takes place upon submission, and the user is redirected back to the assets page and informed of the successful edited submission
+# The asset edit route (lines 105 to 132) directs the user to the edit_asset.html page and prepopulates the fields with the data that forms the selected record retrieved from the database. Validation again takes place upon submission, and the user is redirected back to the assets page and informed of the successful edited submission
 
 
 @main.route('/assets/<int:asset_id>/edit', methods=['GET', 'POST'])
@@ -128,7 +132,7 @@ def edit_asset(asset_id):
     return render_template('edit_asset.html', form=form, asset=asset)
 
 
-# If the user logged in is marked as an admin within the database, the asset delete route (lines 134 to 146) ensures that a dialog box appears that asks the user if they want to confirm deletion of the asset selected or cancel the action which, if confirmed, removes the record from the database and informs the user that deletion was successful. If the user logged in is marked as a regular user within the database, however, then a flashed message appears informing the user that they do not have permission to delete assets
+# If the user logged in is marked as an admin within the database, the asset delete route (lines 138 to 150) ensures that a dialog box appears that asks the user if they want to confirm deletion of the asset selected or cancel the action which, if confirmed, removes the record from the database and informs the user that deletion was successful. If the user logged in is marked as a regular user within the database, however, then a flashed message appears informing the user that they do not have permission to delete assets
 
 
 @main.route('/assets/<int:asset_id>/delete', methods=['POST'])
@@ -146,7 +150,7 @@ def delete_asset(asset_id):
     return redirect(url_for('main.assets'))
 
 
-# Lines 152 to 165 ensure that when the customers.html page is accessed, the customers form is retrieved. Validation takes place on submission to check that the data in each field matches the database model, and if it does, the new record is committed to the database and a flashed message appears to inform the user of the successful submission
+# Lines 156 to 169 ensure that when the customers.html page is accessed, the customers form is retrieved. Validation takes place on submission to check that the data in each field matches the database model, and if it does, the new record is committed to the database and a flashed message appears to inform the user of the successful submission
 
 
 @main.route('/customers', methods=['GET', 'POST'])
@@ -165,7 +169,7 @@ def customers():
     return render_template('customers.html', customers=customers, customer_form=customer_form)
 
 
-# The customer edit route (lines 171 to 186) directs the user to the edit_customer.html page and prepopulates the fields with the data that forms the selected record retrieved from the database. Validation again takes place upon submission, and the user is redirected back to the edit customer page and informed of the successful edited submission
+# The customer edit route (lines 175 to 190) directs the user to the edit_customer.html page and prepopulates the fields with the data that forms the selected record retrieved from the database. Validation again takes place upon submission, and the user is redirected back to the edit customer page and informed of the successful edited submission
 
 
 @main.route('/edit_customer/<int:customer_id>', methods=['GET', 'POST'])
@@ -186,7 +190,7 @@ def edit_customer(customer_id):
     return render_template('edit_customer.html', customer=customer, customer_form=customer_form)
 
 
-# If the user logged in is marked as an admin within the database, the customer delete route (lines 192 to 204) ensures that a dialog box appears that asks the user if they want to confirm deletion of the customer selected or cancel the action which, if confirmed, removes the record from the database and informs the user that deletion was successful. If the user logged in is marked as a regular user within the database, however, then a flashed message appears informing the user that they do not have permission to delete customers
+# If the user logged in is marked as an admin within the database, the customer delete route (lines 196 to 208) ensures that a dialog box appears that asks the user if they want to confirm deletion of the customer selected or cancel the action which, if confirmed, removes the record from the database and informs the user that deletion was successful. If the user logged in is marked as a regular user within the database, however, then a flashed message appears informing the user that they do not have permission to delete customers
 
 
 @main.route('/delete_customer/<int:customer_id>', methods=['POST'])
@@ -204,7 +208,7 @@ def delete_customer(customer_id):
     return redirect(url_for('main.customers'))
 
 
-# Lines 210 to 223 ensure that when the manufacturers.html page is accessed, the manufacturers form is retrieved. Validation takes place on submission to check that the data in each field matches the database model, and if it does, the new record is committed to the database and a flashed message appears to inform the user of the successful submission
+# Lines 214 to 227 ensure that when the manufacturers.html page is accessed, the manufacturers form is retrieved. Validation takes place on submission to check that the data in each field matches the database model, and if it does, the new record is committed to the database and a flashed message appears to inform the user of the successful submission
 
 
 @main.route('/manufacturers', methods=['GET', 'POST'])
@@ -223,7 +227,7 @@ def manufacturers():
     return render_template('manufacturers.html', manufacturers=manufacturers, manufacturer_form=manufacturer_form)
 
 
-# The manufacturer edit route (lines 229 to 244) directs the user to the edit_manufacturer.html page and prepopulates the fields with the data that forms the selected record retrieved from the database. Validation again takes place upon submission, and the user is redirected back to the edit manufacturer page and informed of the successful edited submission
+# The manufacturer edit route (lines 233 to 248) directs the user to the edit_manufacturer.html page and prepopulates the fields with the data that forms the selected record retrieved from the database. Validation again takes place upon submission, and the user is redirected back to the edit manufacturer page and informed of the successful edited submission
 
 
 @main.route('/edit_manufacturer/<int:manufacturer_id>', methods=['GET', 'POST'])
@@ -244,7 +248,7 @@ def edit_manufacturer(manufacturer_id):
     return render_template('edit_manufacturer.html', manufacturer=manufacturer, manufacturer_form=manufacturer_form)
 
 
-# If the user logged in is marked as an admin within the database, the manufacturer delete route (lines 250 to 262) ensures that a dialog box appears that asks the user if they want to confirm deletion of the manufacturer selected or cancel the action which, if confirmed, removes the record from the database and informs the user that deletion was successful. If the user logged in is marked as a regular user within the database, however, then a flashed message appears informing the user that they do not have permission to delete manufacturers
+# If the user logged in is marked as an admin within the database, the manufacturer delete route (lines 254 to 266) ensures that a dialog box appears that asks the user if they want to confirm deletion of the manufacturer selected or cancel the action which, if confirmed, removes the record from the database and informs the user that deletion was successful. If the user logged in is marked as a regular user within the database, however, then a flashed message appears informing the user that they do not have permission to delete manufacturers
 
 
 @main.route('/delete_manufacturer/<int:manufacturer_id>', methods=['POST'])

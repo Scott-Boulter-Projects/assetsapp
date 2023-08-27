@@ -7,10 +7,10 @@ from wtforms.validators import DataRequired, Length, EqualTo
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[
-                           DataRequired(), Length(min=2, max=20)])
+                           DataRequired(), Length(min=3, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[
-                                     DataRequired(), EqualTo('password')])
+                                     DataRequired()])
     submit = SubmitField('Sign Up')
 
 # Lines 19 to 23 utilise the Flask WTForms library to define the class for the login form that appears on login.html. Both the username and password fields are validated to ensure that data is present in both, and that the username has a minimum of 2 characters
@@ -18,7 +18,7 @@ class RegistrationForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[
-                           DataRequired(), Length(min=2, max=20)])
+                           DataRequired(), Length(min=3, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 

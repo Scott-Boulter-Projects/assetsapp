@@ -2,10 +2,12 @@ import pytest
 from app import create_app, db
 from app.models import User
 
+# The following code disables CSRF protection to enable the Pytest unit tests that follow to run, which check the routes for the various pages that comprise the application
+
+
 @pytest.fixture(scope="module")
 def client(request):
     app = create_app()
-    app.config['TESTING'] = True
     app.config['WTF_CSRF_ENABLED'] = False
     client = app.test_client()
 
@@ -23,6 +25,7 @@ def client(request):
 
     yield client
 
+
 def test_register(client):
     response = client.get('/register')
     assert response.status_code == 200
@@ -35,6 +38,7 @@ def test_register(client):
 
     assert b'Registration successful. Please log in below' in response.data
 
+
 def test_login(client):
     response = client.post('/login', data=dict(
         username='testuser',
@@ -43,69 +47,72 @@ def test_login(client):
 
     assert b'Successfully logged in' in response.data
 
+
 def test_assets(client):
     response = client.post('/login', data=dict(
         username='testuser',
         password='testpassword'
     ), follow_redirects=True)
-    
+
     response = client.get('/assets')
     assert response.status_code == 200
     assert b'Asset Management' in response.data
-        
-    
+
+
 def test_edit_asset(client):
     response = client.post('/login', data=dict(
         username='testuser',
         password='testpassword'
     ), follow_redirects=True)
-    
+
     response = client.get('/assets/1/edit')
     assert response.status_code == 200
-    assert b'Edit Asset' in response.data 
+    assert b'Edit Asset' in response.data
+
 
 def test_customers(client):
     response = client.post('/login', data=dict(
         username='testuser',
         password='testpassword'
     ), follow_redirects=True)
-    
+
     response = client.get('/customers')
     assert response.status_code == 200
     assert b'Customer Management' in response.data
-    
-    
+
+
 def test_edit_customer(client):
     response = client.post('/login', data=dict(
         username='testuser',
         password='testpassword'
     ), follow_redirects=True)
-    
+
     response = client.get('/edit_customer/1')
     assert response.status_code == 200
     assert b'Edit Customer' in response.data
-    
-    
+
+
 def test_manufacturers(client):
     response = client.post('/login', data=dict(
         username='testuser',
         password='testpassword'
     ), follow_redirects=True)
-    
+
     response = client.get('/manufacturers')
     assert response.status_code == 200
     assert b'Manufacturer Management' in response.data
-    
+
 
 def test_edit_manufacturer(client):
     response = client.post('/login', data=dict(
         username='testuser',
         password='testpassword'
     ), follow_redirects=True)
-    
+
     response = client.get('/edit_manufacturer/1')
     assert response.status_code == 200
     assert b'Edit Manufacturer' in response.data
-    
+
+
 if __name__ == '__main__':
     pytest.main()
