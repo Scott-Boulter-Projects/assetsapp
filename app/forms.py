@@ -42,8 +42,8 @@ class AssetForm(FlaskForm):
     category = SelectField(
         'Category', choices=category_choices, validators=[DataRequired()])
     comments = TextAreaField('Comments')
-    customer = SelectField('Customer', coerce=int)
-    manufacturer = SelectField('Manufacturer', coerce=int)
+    customer = SelectField('Customer', coerce=int, validators=[DataRequired()])
+    manufacturer = SelectField('Manufacturer', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Create Asset')
 
 # Lines 52 to 54 utilise the Flask WTForms library to define the class for the customer creation form that appears on customers.html. The name field is validated to ensure that data is present before it can be submitted
